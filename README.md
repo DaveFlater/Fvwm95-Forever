@@ -109,9 +109,9 @@ through fvwm95-2.0.43f-dwf8.  The changes made in those releases are
 documented in the [ChangeLog](ChangeLog) file.  In 2026, he renamed the fork
 to Fvwm95 Forever and moved it to GitHub.
 
-The READMEs that were included in fvwm95-2.0.43f can be found under the docs
-subdirectory.  They describe additional, older layers of forking, cloning,
-and hacking.
+The READMEs for the [individual modules](docs/modules) describe their own
+older layers of forking, cloning, and hacking prior to the 2010 fork of the
+whole package.
 
 Click the link to list [other forks of
 Fvwm95](https://github.com/search?q=fvwm95&type=repositories) currently on
