@@ -1,0 +1,302 @@
+2026-02-23 David Flater
+
+	Renamed package to Fvwm95 Forever and moved to GitHub.
+	PACKAGE_VERSION = "Forever"
+
+	Fixed FTBs for GCC 15.
+	Updated things in configure.ac, Makefile.am, and system.fvwm95rc.in.
+	Converted README to Markdown and revised as necessary.
+	Merged BUGS and NEVERDO into README.md.
+
+2020-12-10 David Flater
+
+	fvwm95-2.0.43f-dwf8
+
+	* Fixed multiple definitions of global variables in modules
+	FvwmScroll and FvwmTaskBar.  GCC 10 changed the default behavior
+	from -fcommon to -fno-common, which caused these multiple
+	definitions to be rejected.
+
+2020-03-18 David Flater
+
+	fvwm95-2.0.43f-dwf7
+
+	* Fixed buffer overflows in fvwm/read.c SendDataToModule which
+	were triggered by a long IconPath or PixmapPath.
+
+	* Added mini-firefox.xpm.
+
+	* Updated system.fvwm95rc.in:
+	- Added Firefox;
+	- Added dosbox-x to the workaround for SDL2 fullscreen lossage;
+	- Disabled Alt-arrow hotkeys (shortcuts to scroll by 1/10 of a
+	page) to stop conflict with Doom (Alt = strafe).
+
+	* Updated INSTALL.
+
+2018-01-22 David Flater
+
+	fvwm95-2.0.43f-dwf6
+
+	* Updated system.fvwm95rc.in:
+	- Fixed usage of killall;
+	- Added the fullscreen workaround to chocolate-doom etc.;
+	- Comments.
+
+	* Updated INSTALL.
+
+2017-04-20 David Flater
+
+	fvwm95-2.0.43f-dwf5
+
+	* Replaced faulty recursive build system with monolithic Automake:
+        - Added script utils/makemakefileam.sh to generate Makefile.am;
+	- Replaced configure.ac;
+	- Purged all Imakefile and Makefile.in;
+	- Adjusted install and search paths to agree with modern Linux.
+
+	* Fixed innumerable instances of overflow, underflow, corruption,
+	undefined behavior, division by zero, and broken parsing which
+	were responsible for crashes and misbehavior in fvwm95 and every
+	module.
+
+	* Cleaned up compiler warnings through -Wall -Wno-parentheses on
+	GCC 6.3.0.  Left the following:
+	  ButtonArray.c:
+	    warning: statement with no effect (BOGUS)
+          etc:
+  	    warning: the use of `mktemp' is dangerous, better use `mkstemp'
+	    warning: implicit declaration of function 'ConsoleMessage' (BOGUS)
+
+	* Harmonized swallow triggers in FvwmButtons, FvwmWharf,
+	FvwmTaskBar, and FvwmScript (SwallowExec) to match on resource
+	name (Resource), resource class (Class), or window name (Name),
+	but not icon name (Icon Name).
+
+	* Fixed fvwm95 bugs:
+	- windows suddenly becoming enormous when resizing occurs near the
+	  edge of the virtual desktop;
+	- full-screen glitch when resizing a window that was declared with
+  	  NoHandles and BorderWidth 0;
+	- UseStyle option not accepting quoted identifiers;
+	- false matching by UseStyle option;
+	- no default WindowManagerName for Restart command (now fvwm95).
+
+	* Fixed FvwmAudio bugs:
+	- playing wrong or no sounds;
+	- hanging, waiting on subprocesses to exit;
+	- breaking audio_filename at whitespace.
+
+	* Fixed FvwmConsole not using libreadline by default.
+
+	* Fixed FvwmScript and sample scripts bugs:
+	- missing default for FvwmScriptPath;
+	- references to non-existent things in Buttons script;
+	- infinite loop in PointerSetup script (but it is hopelessly fragile
+	  and may hang on another system).
+
+	* Fixed FvwmTaskBar bugs:
+	- swallowing completely broken;
+	- animation broken or too fast;
+	- main event loop complexity;
+	- no warning on missing *FvwmTaskBarGoodyLoadableSymbol;
+	- bad geometry, location, and spacing of goodies;
+	- bad calibration of x coordinates on mouse clicks on goodies;
+	- area cleared different than area drawn;
+	- missing default for FvwmTaskBarModuleIconPathBatStat;
+	- only allowing one directory in FvwmTaskBarModuleIconPathBatStat.
+
+	* Fixed FvwmWharf bugs:
+	- black box over first button when swallowing failed;
+	- wrong background colors on 32-bit arch;
+	- animation too fast.
+
+	* Corrected inaccuracies in man pages and HTML docs:
+	- Documented the swallow commands for FvwmTaskBar;
+	- Corrected description of the swallow commands for FvwmWharf;
+	- Fixed ghost reference to FvwmInitBanner;
+	- Corrected description of the name-matching behavior of the Style
+  	  command to agree with what is actually done in fvwm/add_window.c
+	  LookInList.
+
+	* Made a few minor additions and enhancements:
+	- Replaced the sample/default system.fvwm95rc;
+	- Made FvwmTaskBar goodies work by single-click;
+	- Improved error reporting by GoodyLoadable.c;
+	- Added mini-xemacs.xpm, mini-chrome.xpm, mini-chromium.xpm,
+	  mini-wilber16.xpm, and green.xpm;
+	- Added LogoTest script.
+
+	* Cleaned up random things:
+	- Merged all needed preprocessor defines into FVWMconfig.h and made
+	  all sources include it;
+	- Removed version.h headers and declarations that conflicted with
+	  FVWMconfig.h;
+	- Merged index.html and GPL.html in with the other HTML files;
+	- Merged xpmroot into utils;
+	- Merged and purged duplicative icon collections:
+	  - FvwmScript/Scripts/some_nice_icons:
+	      moved shutdown.xpm to pixmaps/shutdown2.xpm
+	      moved window.xpm to pixmaps/window2.xpm
+	  - FvwmTaskBar/icons:
+	      moved mini-mail.xpm to mini-icons/mini-mail2.xpm
+	      moved minimail.xbm to mini-icons/minimail.xbm
+	- Fixed saferealloc and made UpdateString use it (3 copies);
+	- Moved random READMEs, example files, etc. from module
+	  subdirectories into docs/modules;
+	- Moved other random READMEs, example files, etc. into docs/random;
+	- Moved the untested/unmaintained ASSound and OffiX subdirs of
+	  FvwmWharf to docs/modules/FvwmWharf;
+	- Deleted all other unused source files and scripts;
+	- Normalized file permissions;
+	- Stripped trailing whitespace.
+
+	Not done:  see BUGS, NEVERDO.
+
+2014-01-26 David Flater
+
+	fvwm95-2.0.43f-dwf4
+
+	* Fixed BatStatModule showing "charging" icon instead of "online"
+	when fully charged.
+
+	* Changed the "alert" and "empty" levels from 10% and 5% to 7% and
+	2% respectively.
+
+2014-01-25 David Flater
+
+ 	fvwm95-2.0.43f-dwf3
+
+	* Fixed crash of FvwmTaskBar when a goody (BatStatModule) returned
+	NULL from its init function to signify failure to init.
+
+	* Updated BatStatModule to work with /sys/class/power_supply.
+	Only BAT0 is monitored.  The legacy APM proc interface is still
+	theoretically supported but has been modified without regression
+	testing.
+
+	* Enhanced mouseover status messages for BatStatModule.
+
+	* Removed extra spaces from BatStatModule error and debug messages.
+
+Sun Sep 1 2013 David Flater
+
+	fvwm95-2.0.43f-dwf2
+
+	* Fixed FvwmButtons infinite looping and failing to exit after
+	Ctrl-Alt-BS.
+
+	* Increased default optimization level to O2.
+
+Sun Jul 11 2010 David Flater
+
+	fvwm95-2.0.43f-dwf1
+
+	* Patched to make it build with GCC 4.4.4 on x86_64 Linux.
+
+Sat Aug 10 2002
+
+	* Fixed return type of 'main' in modules (must be 'int').
+
+Fri Aug 9 2002
+
+	* Applied the stacking order patch from ??
+
+	  This patch changes three things:
+
+          1. FVWM now keeps track of window stacking order:
+
+	  First, it makes FVWM keep track of the stacking order of the
+	  windows, by using a second set of chain pointers (the original
+	  chain keeps track of the order in which windows have been focused,
+	  which is often not the same as the stacking order). So now FVWM
+	  can easily answer the question "who's on third?" at any time (and,
+	  since the new chain is closed into a ring anchored at both ends on
+	  Scr.FvwmRoot, it can tell you who's third from the bottom as
+	  quickly as who's third from the top).
+
+	  2. Reversal of window stacking order when FVWM restarts:
+
+	  Second, by using this new-found knowledge, FVWM will reparent
+	  windows back to the root window (on a Restart or a Recapture
+	  operation) in the reverse of the current stacking order. This
+	  eliminates the old quirk of having the stacking order appear more
+	  or less reversed after restarting FVWM.
+
+	  3. Smoother, faster page/desk transition
+
+	  Third, it restructures the the Desktop and Viewport (page)
+	  switching routines to perform a simultaneous bidirectional loop
+	  through the window list (via the new stacking order chain).
+	  Windows that are moving off the visible screen are unmapped/moved
+	  from the bottom of the stacking order upwards. Windows that are
+	  moving onto the visible screen are mapped/moved from the top down.
+
+	  The intent is to minimize the amount of expose/redraw overhead
+	  during these operations when there are a number of overlapping
+	  windows involved.  It also serves to equalize the visual
+	  disturbance between the moving-out and the moving-in operations.
+	  Previously, moving out of a page/desktop with many overlapping
+	  windows could be disturbing and slow because, as the windows moved
+	  from the top down, the ones underneath got redrawn as they were
+	  exposed. Moving into such a page/desktop, on the other hand, would
+	  appear quick and smooth because, as the upper windows appeared
+	  first, the underlying portions of the subsequently mapped/moved
+	  windows didn't need to get drawn.
+
+	  Now, if you never have any overlapping windows on your desktop,
+	  you won't see any improvement from this. If you only occasionally
+	  have a couple of overlapping windows, you might not notice any
+	  difference. But if you have several windows that overlap
+	  significantly, the transition to or from the page where they are
+	  should be very noticeably quicker and smoother.
+
+Mon Jul 29 2002 Hector Peraza <peraza@uia.ua.ac.be>
+	* Corrected a bug in add_window.c: left buttons with window id of
+	  None were being added to the window's context.
+	* Added an extra check for null windows in HandleModuleInput().
+
+Mon Jul 1 2002 Hector Peraza <peraza@uia.ua.ac.be>
+	* Fixed placement of windows with StaticGravity.
+
+Tue Nov 27 2001 Hector Peraza <peraza@uia.ua.ac.be>
+	* Fixed background color of titlebar buttons.
+	* FvwmBacker: fixed color problems.
+	* FvwmPager: applied MiniIcons and WindowColors patches.
+
+Mon Feb 23 1998 Emmanuel Rouat <rouat@dsys.ceng.cea.fr>
+	* Bug fix ScreenSetup & DeskSetup scripts
+	* updated taskbar manpage
+
+Sun Feb 15 1998 Emmanuel Rouat <rouat@dsys.ceng.cea.fr>
+	* renamed source fvwm95-2.0.43b
+	* Removed example.fvwm95rc (outdated)
+	* renamed icons/ to pixmaps/ for consistency
+
+
+Tue Feb 10 1998 Emmanuel Rouat <rouat@dsys.ceng.cea.fr>
+	* created "uninstall" target in Makefiles
+	* added Batstat module for TaskBar
+	* cleanup done
+	* Docs in HTML look MUCH better - used as on-line doc
+
+Wed Feb 4 1998 Emmanuel Rouat <rouat@dsys.ceng.cea.fr>
+	* created system.fvwm95rc.in
+
+Wed Jan 28 1998 Emmanuel Rouat <rouat@dsys.ceng.cea.fr>
+	* Makefile of FvwmConsole corrected (FvwmConsoleC was missing)
+
+Tue Jan 27 1998 Emmanuel Rouat <rouat@dsys.ceng.cea.fr>
+	* Makefiles updated - should compile and install smoothly now
+
+Thu Jan 22 1998 Emmanuel Rouat <rouat@dsys.ceng.cea.fr>
+	* Scripts for FvwmScripts adapted
+
+Tue Jan 20 1998 Emmanuel Rouat <rouat@dsys.ceng.cea.fr>
+	* sample/system.fvwm95rc lots of tweaking (on going work)
+	* FvwmScript module added (from fvwm-2.0.46)
+	* FvwmForm module updated ( ''    ''    '' )
+	* FvwmWharf module added  ( ''    ''    '' )
+
+Tue Jan 6 1998 Emmanuel Rouat <rouat@dsys.ceng.cea.fr>
+	* modules/FvwmTaskBar 'Enhanced FvwmTasbar' instead of regular one

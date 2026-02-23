@@ -1,0 +1,746 @@
+# 2026-02-22
+# Sample .fvwm95rc (with pieces from older sample config files).
+
+# Usage:
+# - Mouse to focus.  Click title bar or task bar to raise.
+# - Drag corner of window to resize.  Drag edge to move.
+# - Click icon in left corner of title bar (or middle-click on title bar
+#   or background) to get window ops.
+# - Paging occurs by mousing off the screen or by control-arrow key.
+# - Single click on maximize icon in toolbar maximizes vertically.
+#   Click and hold (or click and drag) to maximize in both directions.
+
+# For best results, environment variables XTERMROWS and XEMACSROWS should be
+# exported in .xinitrc to specify the maximum number of rows that xterm and
+# xemacs respectively can use without covering the task bar or extending off
+# the screen.  Something like:
+#   ROOTHEIGHT=`xwininfo -root | fgrep Height | cut -f 2 -d :`
+#   XTERMROWS=$(( ($ROOTHEIGHT - 51)  / $FONTHEIGHT))
+#   XEMACSROWS=$((($ROOTHEIGHT - 133) / $FONTHEIGHT))
+#   export XTERMROWS XEMACSROWS
+
+#========================================================================#
+
+# General behaviors.
+DeskTopSize 3x2
+OpaqueMoveSize 100
+EdgeScroll 100 100
+# To enable wraparound at edge of desktop:
+# EdgeScroll 100000 100000
+EdgeResistance 100 50
+Style "*" MouseFocus, RandomPlacement, NoIcon, BorderWidth 5, HandleWidth 5
+
+# Fonts and colors.
+WindowFont	-adobe-helvetica-bold-r-*-*-12-*-*-*-*-*-*-*
+IconFont	fixed
+MenuFont   	-adobe-helvetica-medium-r-*-*-*-120-*-*-*-*-*-*
+DefaultColors   Black #c3c3c3 #c3c3c3 grey51
+HilightColors   White #000080
+StickyColors    grey51 #60c080
+
+# Ignore all hints, such as the ones that Chrome uses to take away the
+# move/resize handles.
+Style "*" NoPPosition, NoDecorHint, NoFuncHint, NoOLDecor
+
+#========================================================================#
+
+# Paths: colon-separated lists of directories.
+
+# Where to look for modules.
+# Default $(pkglibexecdir), from FVWM_MODULEDIR.
+# ModulePath  @rc_pkglibexecdir@
+
+# Where to look for icons.
+# Default path, from FVWM_ICONDIR:
+#   /usr/include/X11/bitmaps
+#   /usr/share/pixmaps
+#   $(pkgdatadir)/mini-icons
+#   $(pkgdatadir)/pixmaps
+# PixmapPath  /usr/include/X11/bitmaps:/usr/share/pixmaps:@rc_pkgdatadir@/mini-icons:@rc_pkgdatadir@/pixmaps
+
+# The separation of bitmaps from pixmaps no longer is maintained, so this
+# path is confusingly redundant with PixmapPath.  Some sources check one,
+# then the other.  It defaults to FVWM_ICONDIR.
+# IconPath  /usr/local/share/icons
+
+# The BatStat plugin has its own optional icon path (default FVWM_ICONDIR),
+# but it has to be set after the plugin is loaded.  See
+# *FvwmTaskBarModuleIconPathBatStat below.
+
+#========================================================================#
+
+# Single directories.
+
+# Where to find sound files for FvwmAudio.
+# Default null, since the commands executed might not need a path.
+# *FvwmAudioDir  /usr/local/share/sounds
+
+# Location of scripts for FvwmScript.
+# Default $(pkgdatadir)/scripts, from FVWM_SCRIPTS.
+# *FvwmScriptPath  @rc_pkgdatadir@/scripts
+
+# Where to look for FvwmTaskBar plugins ("goodies").
+# Default $(pkglibexecdir)/plugins, from PLUGINS.
+# To silence notifications of loaded plugins, first do
+# *FvwmTaskBarGoodyLoadableQuiet
+# *FvwmTaskBarGoodyLoadablePlugins  @rc_pkglibexecdir@/plugins
+
+#========================================================================#
+
+# Styles.
+
+# No attempt is made to match the window name unless res_name and res_class
+# are both NULL.  This is fine, since a lot of apps modify their window names
+# willy-nilly, making it unreliable for matching.
+
+# Fvwm modules
+Style "Fvwm*"        NoTitle, Sticky, WindowListSkip
+Style "Fvwm Pager"   StaysOnTop, NoHandles
+Style "MiniButtons"  NoTitle, NoHandles, Sticky, WindowListSkip, BorderWidth 0
+Style "TestButtons"      UseStyle MiniButtons
+Style "LogoTestButtons"  NoTitle
+Style "PickATerm"    NoTitle, NoHandles, BorderWidth 3
+Style "FvwmTaskBar"  NoTitle, BorderWidth 4, HandleWidth 4, Sticky, \
+                       WindowListSkip, CirculateSkip
+Style "FvwmWharf"    NoTitle, BorderWidth 4, NoHandles, Sticky, \
+                       WindowListSkip, CirculateSkip
+
+# Apps
+Style "*lock"        NoTitle, NoHandles, Sticky, WindowListSkip
+Style "log"          WindowListSkip
+Style "XConsole"     UseStyle log
+
+# Workaround for the SDL2 fullscreen lossage.  Include the chocolate apps but
+# not their setup programs.
+Style "stella"             NoTitle, NoHandles, BorderWidth 0
+Style "eduke*"             NoTitle, NoHandles, BorderWidth 0
+Style "chocolate-doom"     NoTitle, NoHandles, BorderWidth 0
+Style "chocolate-hexen"    NoTitle, NoHandles, BorderWidth 0
+Style "chocolate-heretic"  NoTitle, NoHandles, BorderWidth 0
+Style "chocolate-strife"   NoTitle, NoHandles, BorderWidth 0
+Style "dosbox-x"           NoTitle, NoHandles, BorderWidth 0
+Style "mame"               NoTitle, NoHandles, BorderWidth 0
+
+# Mini-icons to appear in the title bar and task bar.
+Style "*"                   TitleIcon mini-x2.xpm
+Style "XTerm"               TitleIcon mini-term.xpm
+Style "Thunderbird"         TitleIcon mini-mail.xpm
+Style "google-chrome"       TitleIcon mini-chrome.xpm
+Style "chromium"            TitleIcon mini-chromium.xpm
+Style "Firefox"             TitleIcon mini-firefox.xpm
+Style "XEmacs"              TitleIcon mini-xemacs.xpm
+Style "gimp"                TitleIcon mini-wilber16.xpm
+Style "xcalc"               TitleIcon mini-calc.xpm
+Style "xfontsel"            TitleIcon mini-font.xpm
+Style "xclipboard"          TitleIcon mini-clipboard.xpm
+Style "acroread"            TitleIcon mini-pdf.xpm
+Style "Xpdf"                TitleIcon mini-pdf.xpm
+
+# LibreOffice windows change names and classes dynamically, so they won't
+# always get the correct TitleIcon no matter what is done here.
+Style "libreoffice-writer"  TitleIcon mini-edit.xpm
+Style "libreoffice-calc"    TitleIcon mini-pager.xpm
+
+#========================================================================#
+
+# Stuff to do at start-up (see also .xinitrc).
+
+# Exec does not require an additional 'exec' at the beginning or '&' at the
+# end of the command.
+
+AddToFunc "InitFunction"
++ "I" Exec xsetroot -solid cyan4
++ "I" Module FvwmButtons MiniButtons
++ "I" Module FvwmTaskBar
++ "I" Module FvwmBacker
+
+AddToFunc "RestartFunction" "I" Module FvwmButtons MiniButtons
++                           "I" Module FvwmTaskBar
++                           "I" Module FvwmBacker
+
+#========================================================================#
+
+# Menus.
+
+AddToMenu "StartMenu"
++ "Force restart Chrome%mini-chrome.xpm%"  Exec killall chrome; chrome >& /dev/null
++ ""                                       Nop 
++ "Applications%mini-hex.xpm%"             Popup Applications
++ "Accessories%mini-paint.xpm%"            Popup Accessories
++ "Fvwm95 modules%mini-modules.xpm%"       Popup Modules
++ ""                                       Nop 
++ "Lock screen (blank)%mini-lock.xpm%"     Exec xlock -mode blank
++ "Clear background%green.xpm%"	           Exec xsetroot -solid cyan4
++ "Refresh screen%mini-eye.xpm%"           Refresh
++ ""                                       Nop
++ "Switch to twm%mini-twm.xpm%"            Restart twm
++ "Restart Fvwm95%mini-turn.xpm%"          Restart fvwm95
++ "Exit%mini-stop.xpm%"                    Quit
+
+AddToMenu "Applications"
++ "Firefox%mini-firefox.xpm%"        Exec firefox >& /dev/null
++ "Chrome%mini-chrome.xpm%"          Exec chrome >& /dev/null
++ "Chromium%mini-chromium.xpm%"      Exec chromium >& /dev/null
++ "XEmacs%mini-xemacs.xpm%"          Exec xemacs -geometry 80x${XEMACSROWS:-35}
++ "Writer%mini-edit.xpm%"            Exec swriter
++ "Calc%mini-pager.xpm%"             Exec scalc
++ "GIMP%mini-wilber16.xpm%"          Exec gimp
++ "Mail%mini-mail.xpm%"              Exec thunderbird
+
+AddToMenu "Accessories"
++ "XTerms%mini-term.xpm%"                Popup XTerms
++ "Psensor%mini-perf.xpm%"               Exec psensor
++ "System load%mini-perf.xpm%"           Exec xload
++ "Top%mini-run.xpm%" 	                 Exec xterm -e top
++ "Calculator%mini-calc.xpm%"		 Exec xcalc
++ "Font picker%mini-font.xpm%"           Exec xfontsel
++ "Magnifying glass%mini-zoom.xpm%"      Exec xmag
++ "Clipboard%mini-clipboard.xpm%"        Exec xclipboard
++ "Kernel messages%mini-bug1.xpm%"       Exec xterm -geometry 80x${XTERMROWS:-39} -e "dmesg | less"
++ "GLX test%mini-exp.xpm%"               Exec glxgears
++ "DGA test%green.xpm%"                  Exec dga
++ "X event viewer%mini-mouse.xpm%"       Exec xterm -geometry 80x${XTERMROWS:-39} -e xev
++ "The manual%mini-book1.xpm%"           Exec xman
++ "BiBTeX documentation%mini-book2.xpm%" Exec xdvi /usr/share/texmf/doc/bibtex/base/btxdoc.dvi
+
+AddToMenu FBsub
++ "Container test%mini-roach.xpm%" Module FvwmButtons TestButtons
++ "Logo test%mini-roach.xpm%"      Module FvwmButtons LogoTestButtons
+
+AddToMenu FSsub
++ "BellSetup%mini-roach.xpm%"      Module FvwmScript BellSetup
++ "Buttons%mini-roach.xpm%"        Module FvwmScript Buttons
++ "Date%mini-roach.xpm%"           Module FvwmScript Date
++ "DeskSetup%mini-roach.xpm%"      Module FvwmScript DeskSetup
++ "FileBrowser%mini-roach.xpm%"    Module FvwmScript FileBrowser ${HOME}
++ "KeyboardSetup%mini-roach.xpm%"  Module FvwmScript KeyboardSetup
++ "LogoTest%mini-roach.xpm%"       Module FvwmScript LogoTest
++ "PointerSetup%mini-roach.xpm%"   Module FvwmScript PointerSetup
++ "Quit%mini-roach.xpm%"           Module FvwmScript Quit
++ "ScreenDump%mini-roach.xpm%"     Module FvwmScript ScreenDump
++ "ScreenSetup%mini-roach.xpm%"    Module FvwmScript ScreenSetup
+
+AddToMenu "Modules"
+# FvwmCpp and FvwmM4 are for scripting.
++ "FvwmAudio%mini-roach.xpm%"        Module FvwmAudio
++ "FvwmAuto%mini-roach.xpm%"         Module FvwmAuto 400
++ "FvwmBanner%mini-roach.xpm%"       Module FvwmBanner
++ "FvwmButtons%mini-roach.xpm%"      Popup FBsub
++ "FvwmConsole%mini-roach.xpm%"	     Module FvwmConsole -sb
++ "FvwmDebug (logs to stderr)%mini-roach.xpm%"  Module FvwmDebug
++ "FvwmForm%mini-roach.xpm%"         Module FvwmForm PickATerm
++ "FvwmIconBox%mini-roach.xpm%"      Module FvwmIconBox
++ "FvwmIconMan%mini-roach.xpm%"      Module FvwmIconMan
++ "FvwmIdent%mini-roach.xpm%"        Module FvwmIdent
++ "FvwmPager%mini-roach.xpm%"        Module FvwmPager 0 1
++ "FvwmScript%mini-roach.xpm%"       Popup FSsub
++ "FvwmScroll%mini-roach.xpm%"       Module FvwmScroll
++ "FvwmTalk%mini-roach.xpm%"         Module FvwmTalk
++ "FvwmWharf%mini-roach.xpm%"        Module FvwmWharf
++ "FvwmWinList%mini-roach.xpm%"      Module FvwmWinList
++ ""                                              Nop
++ "These silently create files"                   Nop
++ "  in your home dir!"                           Nop
++ "FvwmSave%mini-roach.xpm%"         Module FvwmSave
++ "FvwmSaveDesk%mini-roach.xpm%"     Module FvwmSaveDesk
++ ""                                              Nop
++ "Started automatically"                         Nop
++ "FvwmBacker%mini-roach.xpm%"       Module FvwmBacker
++ "FvwmTaskBar%mini-roach.xpm%"      Module FvwmTaskBar
++ ""                                              Nop
++ "Kill FvwmAudio%mini-cross.xpm%"   KillModule FvwmAudio
++ "Kill FvwmAuto%mini-cross.xpm%"    KillModule FvwmAuto
++ "Kill FvwmBacker%mini-cross.xpm%"  KillModule FvwmBacker
++ "Kill FvwmDebug%mini-cross.xpm%"   KillModule FvwmDebug
+
+AddToMenu "XTerms"
++ "Normal%mini-term.xpm%"        Exec xterm
++ "Tall%mini-term.xpm%"          Exec xterm -geometry 80x${XTERMROWS:-39}
++ "Small font%mini-term.xpm%"    Exec xterm -fn fixed
++ "UTF8%mini-term.xpm%"   Exec LANG=en_US.utf8 xterm -fn -misc-fixed-medium-r-normal--20-200-75-75-c-100-iso10646-1
++ "Beeping%mini-term.xpm%"       Exec xterm +vb
+
+AddToMenu "Window" "Window Ops" Title
++ "&Identify%mini-question.xpm%"  Module FvwmIdent
++ "&Move%mini-move.xpm%"        Move
++ "&Resize%mini-resize.xpm"	Resize
++ "R&aise%mini-raise.xpm%"      Raise
++ "&Lower%mini-lower.xpm%"      Lower
++ "Minimize%mini-iconify.xpm"   Iconify
++ "(Un)Stick%mini.stick.xpm"    Stick
++ "Maximize vert%mini-maxtall.xpm%"   Maximize   0 100
++ "Maximize horiz%mini-maxwide.xpm%"  Maximize 100   0
++ "Maximize both%mini-max1.xpm%"      Maximize 100 100
++ ""                            Nop
++ "Kill%mini-bomb.xpm%"         Destroy
++ "&Close%mini-cross.xpm%"      Delete
+
+#========================================================================#
+
+# Functions.
+
+# Click = maximize vertically
+# Hold down = full maximize
+AddToFunc "Maximize-Func" \
+  "M"	Maximize 100 100
++ "C"	Maximize 0 100
+
+# This one moves and then raises the window if you drag the mouse,
+# only raises the window if you click, or does a full maximize if 
+# you double click
+AddToFunc "Move-or-Raise" "M" Move
++                         "M" Raise
++                         "C" Raise
++                         "D" Maximize 100 100
+
+# This one resizes and then raises the window if you drag the mouse,
+# only raises the window if you click,  or does a RaiseLower if you double 
+# click
+AddToFunc "Resize-or-Raise" "M" Resize
++                           "M" Raise
++                           "C" Raise
++                           "D" RaiseLower
+
+# This creates the "system" menu for the title-bar window-ops pop-up.
+AddToFunc "window_ops_func" "C" PopUp Window
++              "M" PopUp Window
++              "D" PopUp Window
+
+#========================================================================#
+
+# Mouse bindings.
+
+# First, for the mouse in the root window
+# Button 1 gives the StartMenu menu
+# Button 2 gives the Window Ops menu
+# Button 3 gives the WindowList (like TwmWindows)
+#     Button	Context Modifi 	Function
+Mouse 1		R   	A       Menu "StartMenu" Nop
+Mouse 2		R    	A       Menu "Window Ops" Nop
+Mouse 3         R       A       WindowList
+
+# Now the title bar buttons
+# Any button in the left title-bar button gives the window ops menu
+# Any button in the first right title-bar button Iconifies the window
+# Any button in the second title-bar button maximizes
+# Button 1 in the third (rightmost) title-bar button closes
+# Note the use of "Mouse 0" for AnyButton.
+#     Button	Context Modif 	Function
+Mouse 0		1    	A      	Function "window_ops_func"
+Mouse 1         2       A       Delete
+Mouse 0		4    	A     	Function "Maximize-Func"
+Mouse 0		6    	A     	Iconify
+
+# Now the rest of the frame
+# Button 1 in the corner pieces, with any modifiers, gives resize or raise
+# Button 1 in the title, sides, or icon, w/ any modifiers, gives move or raise
+# Button 2 in the corners, sides, or title-bar gives the window ops menu
+# Button 3 anywhere in the decoration (except the title-bar buttons)
+# does a raise-lower
+Mouse 1		F	A	Function "Resize-or-Raise"
+Mouse 1		TS	A	Function "Move-or-Raise"
+Mouse 2		FST	A	Function "window_ops_func"
+Mouse 3		TSIF	A	RaiseLower
+
+# Clicking on icons.
+Mouse 1 I A Iconify
+
+#========================================================================#
+
+# Keyboard shortcuts.
+
+# Arrow Keys
+# press arrow + control anywhere, and scroll by 1 page
+Key Left	A	C	Scroll -100 0
+Key Right	A	C	Scroll +100 +0
+Key Up		A	C	Scroll +0   -100
+Key Down	A	C	Scroll +0   +100
+
+# press arrow + meta key, and scroll by 1/10 of a page
+# Disabled never-used feature to stop conflict with Doom (Alt = strafe).
+# Key Left	A	M	Scroll -10 +0
+# Key Right	A	M	Scroll +10 +0
+# Key Up		A	M	Scroll +0  -10
+# Key Down	A	M	Scroll +0  +10
+
+# Pause button = privacy scram switch.
+# Note that Ctrl-Alt-BS is caught by the X server not the window manager.
+Key Pause A0123456789 N Exec killall firefox firefox-bin GeckoMain chrome chromium mplayer mpv ffplay
+
+#========================================================================#
+
+# Finally, configurations of the modules, in alphabetical order.
+
+# -------- FvwmAudio
+
+# You might want to change the rate to 48k.
+*FvwmAudioPlayCmd            sox -q -r 44100 -n -t alsa
+
+# If it is set, FvwmAudioDir is prefixed to the audio_filename given below
+# for each window-manager_action.  My so-called audio files are actually sox
+# synth invocations.  The startup and shutdown sounds use low frequencies
+# that are completely inaudible on lousy laptop speakers.
+*FvwmAudio startup           synth 15 sine 30-500 fade h 0 -0 15 gain -20
+*FvwmAudio shutdown          synth 3 sine 80-30 gain -20
+*FvwmAudio add_window        synth 0.5 pinknoise fade l 0.5 trim =0.25
+*FvwmAudio destroy_window    synth 1 brownnoise fade l 0 -0 1 trim 0 =0.5
+*FvwmAudio deiconify         synth 0.25 sine 1-8000 gain -20
+*FvwmAudio iconify           synth 0.25 sine 8000-1 gain -20
+
+# -------- FvwmAuto
+
+# No configurables.  The only input is the numeric argument which is the
+# delay in milliseconds.
+
+# -------- FvwmBacker
+
+# FvwmBacker only changes the background when the desk changes, not when the
+# page changes.  You need to switch desks in FvwmPager to see this work.
+*FvwmBackerDesk 0 -solid cyan4
+*FvwmBackerDesk 1 -solid midnightblue
+
+# -------- FvwmBanner
+
+# Use defaults.
+
+# -------- FvwmButtons
+
+# MiniButtons
+
+*MiniButtonsFore Black
+*MiniButtonsBack #c0c0c0
+*MiniButtonsFont -adobe-helvetica-bold-r-*-*-10-*-*-*-*-*-*-*
+*MiniButtonsGeometry -5+3
+*MiniButtonsColumns 1
+*MiniButtonsPadding 1 1
+
+*MiniButtons - mini-firefox.xpm   Exec firefox >& /dev/null
+*MiniButtons - mini-chrome.xpm    Exec chrome >& /dev/null
+*MiniButtons - mini-chromium.xpm  Exec chromium >& /dev/null
+*MiniButtons - mini-xemacs.xpm    Exec xemacs -geometry 80x${XEMACSROWS:-35}
+*MiniButtons - mini-term.xpm      Exec xterm
+*MiniButtons - mini-edit.xpm      Exec swriter
+*MiniButtons - mini-pager.xpm     Exec scalc
+*MiniButtons - mini-wilber16.xpm  Exec gimp
+*MiniButtons - mini-calc.xpm      Exec xcalc
+*MiniButtons - mini-mail.xpm      Exec thunderbird
+
+# TestButtons (container test)
+
+*TestButtonsFore Black
+*TestButtonsBack #c0c0c0
+*TestButtonsFont -adobe-helvetica-bold-r-*-*-10-*-*-*-*-*-*-*
+*TestButtonsGeometry +510+0
+*TestButtonsColumns 2
+*TestButtonsRows    2
+*TestButtonsPadding 1 1
+*TestButtons(2x1, Swallow FvwmPager "FvwmPager 0 1")
+*TestButtons(Container)
+*TestButtons - mini-xemacs.xpm    Exec xemacs -geometry 80x${XEMACSROWS:-35}
+*TestButtons - mini-term.xpm      Exec xterm
+*TestButtons - mini-edit.xpm      Exec swriter
+*TestButtons - mini-pager.xpm     Exec scalc
+*TestButtons(End)
+*TestButtons - fonts.xpm          Exec xfontsel
+
+# Multiple instances test (passes).
+# The Size option is mandatory here.  From the man page:  "A buttonbar with
+# only swallowed windows will not get very large without this option
+# specified, as FvwmButtons does not consider sizes for swallowing buttons."
+
+*LogoTestButtonsFore Black
+*LogoTestButtonsBack #c0c0c0
+*LogoTestButtonsFont -adobe-helvetica-bold-r-*-*-10-*-*-*-*-*-*-*
+*LogoTestButtonsGeometry +510+0
+*LogoTestButtonsColumns 5
+*LogoTestButtonsRows    1
+*LogoTestButtons(Size 52 52, Swallow xlogo1 "Exec xlogo -title xlogo1 -geometry 48x48")
+*LogoTestButtons(Size 52 52, Swallow xlogo2 "Exec xlogo -title xlogo2 -geometry 48x48")
+*LogoTestButtons(Size 52 52, Swallow xlogo3 "Exec xlogo -title xlogo3 -geometry 48x48")
+*LogoTestButtons(Size 52 52, Swallow xlogo4 "Exec xlogo -title xlogo4 -geometry 48x48")
+*LogoTestButtons(Size 52 52, Swallow xlogo5 "Exec xlogo -title xlogo5 -geometry 48x48")
+
+# -------- FvwmConsole
+
+# Use defaults.
+
+# This sort of thing has to go in .Xdefaults or .Xresources:
+# FvwmConsole*scrollBar: true
+
+# -------- FvwmCpp
+
+# No configurables.
+
+# -------- FvwmDebug
+
+# No configurables.
+
+# -------- FvwmForm
+
+*PickATermGrabServer
+*PickATermWarpPointer
+*PickATermFont          -adobe-helvetica-bold-r-*-*-12-*-*-*-*-*-*-*
+*PickATermButtonFont    -adobe-helvetica-bold-r-*-*-12-*-*-*-*-*-*-*
+*PickATermFore          Black
+*PickATermBack          Light Gray
+*PickATermItemFore      Wheat
+*PickATermItemBack      Gray50
+
+*PickATermLine center
+*PickATermText "Select kind of XTerm to launch"
+*PickATermLine expand
+*PickATermButton   quit "Normal"
+*PickATermCommand  Exec xterm
+*PickATermButton   quit "Tall"
+*PickATermCommand  Exec xterm -geometry 80x${XTERMROWS:-39}
+*PickATermButton   quit "Small font"
+*PickATermCommand  Exec xterm -fn fixed
+*PickATermButton   quit "UTF8"
+*PickATermCommand  Exec LANG=en_US.utf8 xterm -fn -misc-fixed-medium-r-normal--20-200-75-75-c-100-iso10646-1
+*PickATermButton   quit "Beeping"
+*PickATermCommand  Exec xterm +vb
+*PickATermButton   quit "Cancel"
+*PickATermCommand  Nop
+
+# -------- FvwmIconBox
+
+# This is pretty close to the sample config given in its man page.
+*FvwmIconBoxIconBack    #cfcfcf
+*FvwmIconBoxIconHiFore  black
+*FvwmIconBoxIconHiBack  LightSkyBlue
+*FvwmIconBoxBack        #5f9ea0
+*FvwmIconBoxGeometry    5x1+510+0
+*FvwmIconBoxMaxIconSize 64x38
+*FvwmIconBoxFont        -adobe-helvetica-medium-r-*-*-12-*-*-*-*-*-*-*
+*FvwmIconBoxSortIcons    IconName
+*FvwmIconBoxPadding     4
+*FvwmIconBoxFrameWidth  9 7
+*FvwmIconBoxLines       10
+*FvwmIconBoxSBWidth     11
+*FvwmIconBoxPlacement   Left Top
+*FvwmIconBoxPixmap      fvwm.xpm
+*FvwmIconBoxSetWMIconSize
+*FvwmIconBoxHilightFocusWin
+#
+# Mouse bindings
+#
+*FvwmIconBoxMouse       1       Click           Iconify -1,Raise,Focus
+*FvwmIconBoxMouse       1       DoubleClick     Module FvwmIdent
+*FvwmIconBoxMouse       2       Click           Close
+*FvwmIconBoxMouse       3       Click           Iconify
+#
+# Key bindings
+#
+*FvwmIconBoxKey         r       RaiseLower
+*FvwmIconBoxKey         space   Iconify
+*FvwmIconBoxKey         d       Close
+#
+# FvwmIconBox built-in functions
+#
+*FvwmIconBoxKey         n       Next
+*FvwmIconBoxKey         p       Prev
+*FvwmIconBoxKey         h       Left
+*FvwmIconBoxKey         j       Down
+*FvwmIconBoxKey         k       Up
+*FvwmIconBoxKey         l       Right
+#
+# Icon file specifications
+#
+# Mostly, you don't have to specify icon files, as FvwmIconBox now
+# reads icon files specified in Style commands.
+#
+*FvwmIconBox            "Fvwm*"         -
+
+# -------- FvwmIconMan
+
+*FvwmIconMan*nummanagers 2
+*FvwmIconMan*resolution  global
+*FvwmIconMan*background  slategrey
+*FvwmIconMan*foreground  white
+*FvwmIconMan*font        7x13
+*FvwmIconMan*action      click1 Iconify -1,Raise,Focus
+*FvwmIconMan*action      click2 Close
+*FvwmIconMan*action      click3 Iconify
+*FvwmIconMan*action      select Focus 0
+
+*FvwmIconMan*1*geometry  194x100-1+300
+*FvwmIconMan*1*show      resource=xterm
+
+*FvwmIconMan*2*geometry  194x100-1+400
+
+# -------- FvwmIdent
+
+*FvwmIdentBack #000080
+*FvwmIdentFore Yellow
+*FvwmIdentFont -adobe-helvetica-medium-r-*-*-12-*-*-*-*-*-*-*
+
+# -------- FvwmM4
+
+# No configurables.
+
+# -------- FvwmPager
+
+*FvwmPagerBack grey60
+*FvwmPagerFore black
+*FvwmPagerFont -adobe-helvetica-bold-r-*-*-10-*-*-*-*-*-*-*
+*FvwmPagerHilight #c3c3c3
+*FvwmPagerGeometry +1+1
+*FvwmPagerSmallFont 5x8
+*FvwmPagerDeskColor 0 cyan4
+*FvwmPagerDeskColor 1 #5050FF
+
+# -------- FvwmSave
+
+# No configurables.
+
+# -------- FvwmSaveDesk
+
+# No configurables.
+
+# -------- FvwmScript
+
+# *FvwmScriptPath is set with the other paths way above.
+
+# -------- FvwmScroll
+
+*FvwmScrollFore Black
+*FvwmScrollBack #c0c0c0
+
+# -------- FvwmTalk
+
+# No configurables.
+
+# -------- FvwmTaskBar
+
+*FvwmTaskBarGeometry +0-0
+*FvwmTaskBarFore Black
+*FvwmTaskBarBack #c3c3c3
+*FvwmTaskBarTipsFore black
+*FvwmTaskBarTipsBack #c3c3c3
+*FvwmTaskBarFont -adobe-helvetica-medium-r-*-*-*-120-*-*-*-*-*-*
+*FvwmTaskBarSelFont -adobe-helvetica-bold-r-*-*-*-120-*-*-*-*-*-*
+*FvwmTaskBarAction Click1 Iconify -1,Raise,Focus
+*FvwmTaskBarAction Click2 Close
+*FvwmTaskBarAction Click3 Iconify
+*FvwmTaskBarUseSkipList
+*FvwmTaskBarAutoStick
+*FvwmTaskBarStartName Start
+*FvwmTaskBarStartMenu StartMenu
+*FvwmTaskBarStartIcon mini-penguin.xpm
+*FvwmTaskBarStatusFont fixed
+*FvwmTaskBarShowTips
+*FvwmTaskBarShowTransients
+*FvwmTaskBarHighlightFocus
+#*FvwmTaskBarAutoHide
+*FvwmTaskBarDeskOnly
+*FvwmTaskBarGoodyLoadableQuiet
+
+# Swallowed windows are made *very* small and filed with the goodies.  Not
+# many things will work.  Pager barely survives, but is mostly useless since
+# mouse clicks don't pass through (see BUGS).
+#*FvwmTaskBarSwallowModule FvwmPager FvwmPager 0 1
+*FvwmTaskBarSwallow xload xload -nolabel -update 4 -bg grey59 -geometry -1500-1500
+# Multiple instances test (passes).
+#*FvwmTaskBarSwallow xlogo1 xlogo -title xlogo1
+#*FvwmTaskBarSwallow xlogo2 xlogo -title xlogo2
+#*FvwmTaskBarSwallow xlogo3 xlogo -title xlogo3
+
+# ShowDateModule
+*FvwmTaskBarGoodyLoadableSymbol ShowDateModuleSymbol
+*FvwmTaskBarGoodyLoadableId .DATE
+*FvwmTaskBarShowDateModuleTip.DATE Date
+*FvwmTaskBarShowDateModuleCommand.DATE exec xclock -d -update 1
+*FvwmTaskBarShowDateModuleClockFormat.DATE %a %b %d %H:%M %Z
+
+# BatStatModule
+*FvwmTaskBarGoodyLoadableSymbol BatStatModuleSymbol
+*FvwmTaskBarGoodyLoadableId BatStat
+# Where to look for BatStat plugin's icons.  Default FVWM_ICONDIR.
+# This line has to appear below where the plugin is loaded.
+# *FvwmTaskBarModuleIconPathBatStat    @rc_pkgdatadir@/mini-icons
+
+# MailCheckModule
+*FvwmTaskBarGoodyLoadableSymbol MailCheckModuleSymbol
+*FvwmTaskBarGoodyLoadableId .MAIL
+*FvwmTaskBarMailCheckModuleMailIcon.MAIL mini-mail.xpm
+#*FvwmTaskBarMailCheckModuleCommand.MAIL Exec xterm -geometry 80x${XTERMROWS:-39} -e mutt
+*FvwmTaskBarMailCheckModuleCommand.MAIL Exec thunderbird
+*FvwmTaskBarMailCheckModuleNewMailIcon.MAIL mini-asmail.xpm
+*FvwmTaskBarMailCheckModuleNewMailTip.MAIL You have new mail
+# *FvwmTaskBarMailCheckModuleNewMailCommand.MAIL beep
+*FvwmTaskBarMailCheckModuleUnreadMailIcon.MAIL mini-unreadmail.xpm
+*FvwmTaskBarMailCheckModuleMailFile.MAIL $MAIL
+*FvwmTaskBarMailCheckModuleAutoMailTip.MAIL
+#*FvwmTaskBarMailCheckModuleMailTipUnblankScreen.MAIL
+*FvwmTaskBarMailCheckModuleMailTipFormat.MAIL 1 0 10 2 10
+
+# CheckLockModule:  indicate when core file exists in home dir.
+# (The original application was to show when a modem was connected.)
+*FvwmTaskBarGoodyLoadableSymbol CheckLockModuleSymbol
+*FvwmTaskBarGoodyLoadableId .Coredump
+*FvwmTaskBarCheckLockModuleIcon.Coredump mini-bomb.xpm
+*FvwmTaskBarCheckLockModuleTip.Coredump You have a coredump
+*FvwmTaskBarCheckLockModuleCommand.Coredump Nop
+*FvwmTaskBarCheckLockModuleLockFile.Coredump $HOME/core
+
+# GoodyModule:  quick launch.
+# (Demo multiple instances of same plugin.)
+*FvwmTaskBarGoodyLoadableSymbol GoodyModuleSymbol
+*FvwmTaskBarGoodyLoadableId .FileBrowser
+*FvwmTaskBarGoodyModuleIcon.FileBrowser mini-filemgr.xpm
+*FvwmTaskBarGoodyModuleTip.FileBrowser File browser
+*FvwmTaskBarGoodyModuleCommand.FileBrowser exec chrome file://${HOME} >& /dev/null || chromium file://${HOME} >& /dev/null
+#
+*FvwmTaskBarGoodyLoadableSymbol GoodyModuleSymbol
+*FvwmTaskBarGoodyLoadableId .TermPicker
+*FvwmTaskBarGoodyModuleIcon.TermPicker mini-term.xpm
+*FvwmTaskBarGoodyModuleTip.TermPicker Term picker
+*FvwmTaskBarGoodyModuleCommand.TermPicker Module FvwmForm PickATerm
+
+# -------- FvwmWharf
+
+*FvwmWharfAnimate
+*FvwmWharfAnimateMain
+*FvwmWharfGeometry -1+300
+*FvwmWharfColumns 1 
+*FvwmWharfBgcolor Grey 
+#*FvwmWharfForceSize
+*FvwmWharfFullPush
+*FvwmWharfTextureType 1
+*FvwmWharfTextureColor WhiteSmoke DarkGrey
+
+*FvwmWharf X 		smallx.xpm 	Folder
+*FvwmWharf Exit		exit.xpm  	Quit
+*FvwmWharf xlock 	Jxlock.xpm 	Exec xlock -mode random 
+*FvwmWharf ~Folder
+
+*FvwmWharf clock nil MaxSwallow "xclock" xclock -padding 0 -bg grey  
+*FvwmWharf xterm 	rterm.xpm   	Exec xterm  
+*FvwmWharf xemacs    xemacs-icon.xpm 	Exec xemacs -geometry 80x${XEMACSROWS:-35}
+*FvwmWharf gimp 	wilber.xpm 	Exec gimp 
+*FvwmWharf kill   	bomb_3d.xpm     Destroy
+# Unlike FvwmButtons, FvwmWharf has no option to allow the pager to occupy 2
+# spaces.  Starting two instances of FvwmPager is problematic too since
+# FvwmPager needs a symbolic link to identify a new instance.  So, only do
+# one desktop to avoid being horizontally squished.
+*FvwmWharf pager nil MaxSwallow FvwmPager Module FvwmPager 0 0
+*FvwmWharf xload nil MaxSwallow "xload" xload -nolabel -update 4 \
+                                -bg grey59 -geometry -1500-1500
+*FvwmWharf Recycler  recycler.xpm 	Restart fvwm95
+
+# Multiple instances test (passes).
+# On xlogo, swallow fails, maxswallow succeeds.
+#*FvwmWharf xlogo1 nil MaxSwallow "xlogo1" xlogo -title xlogo1
+#*FvwmWharf xlogo2 nil MaxSwallow "xlogo2" xlogo -title xlogo2
+#*FvwmWharf xlogo3 nil MaxSwallow "xlogo3" xlogo -title xlogo3
+
+# -------- FvwmWinList
+
+*FvwmWinListBack #c3c3c3
+*FvwmWinListFore Black
+*FvwmWinListFont -adobe-helvetica-bold-r-*-*-10-*-*-*-*-*-*-*
+*FvwmWinListAction Click1 Iconify -1,Raise,Focus
+*FvwmWinListAction Click2 Close
+*FvwmWinListAction Click3 Iconify
+*FvwmWinListUseSkipList
+*FvwmWinListGeometry +0+350
