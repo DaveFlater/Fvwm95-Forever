@@ -84,9 +84,9 @@ configure.
 
 Customization is accomplished by creating a user file .fvwm95rc or by
 modifying the system-wide system.fvwm95rc.  Consult the man page for fvwm95,
-the installed system.fvwm95rc, and other documentation provided in the
-distribution for details.  Beware that described syntax can be out-of-date
-with respect to the source code.
+the installed system.fvwm95rc, and other [documentation provided in the
+distribution](docs/html/index.html) for details.  Beware that described
+syntax can be out-of-date with respect to the source code.
 
 The included sample config file permits a reasonable demo of all modules
 except the preprocessors.  See the modules' man pages for further options.
@@ -143,12 +143,13 @@ user mouses over it.
 subsequent tip windows might be blanked out.
 - The coordinate fudging in ShowDateModule is fragile and font-specific.
 
-### SDL bugs
+### [SDL](https://www.libsdl.org/) bugs
 
 SDL2 introduced a regression in how SDL implements fullscreen mode with
 non-[EWMH](https://specifications.freedesktop.org/wm/latest/) (non-NetWM)
-window managers.  Apps like Stella and EDuke32 that used to work fine with
-Fvwm95 and SDL1 now get fouled up when going fullscreen.
+window managers.  Apps like [Stella](https://stella-emu.github.io/) and
+[EDuke32](https://www.eduke32.com/) that used to work fine with Fvwm95 and
+SDL1 now get fouled up when going fullscreen.
 
 The following workaround worked for SDL2:
 
