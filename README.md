@@ -95,17 +95,19 @@ except the preprocessors.  See the modules' man pages for further options.
 
 [Fvwm95](https://fvwm95.sourceforge.net/) began when [Hector Peraza and David
 Barth](https://www.fvwm.org/fvwm-ml/16071.html) forked
-[Fvwm](https://www.fvwm.org/) version 2.0.41b in 1996.
+[Fvwm](https://www.fvwm.org/) version 2.0.41b in 1996.  Fvwm itself was
+previously forked from [Twm](https://gitlab.freedesktop.org/xorg/app/twm).
 
 The changelog shows that Fvwm95 was worked on by Emmanuel Rouat in 1998, then
-again by Hector Peraza from 2001 to 2003.  The Fvwm95 page on SourceForge is
+again by Hector Peraza in 2001 and 2002.  The Fvwm95 page on SourceForge is
 still there, but it was last updated in 2001, and the last release was
 fvwm95-2.0.43f dated 2003-05-04.
 
 Dave Flater forked fvwm95-2.0.43f in 2010 and made a series of releases on
 [his own web site](https://flaterco.com) designated fvwm95-2.0.43f-dwf1
-through fvwm95-2.0.43f-dwf8.  In 2026, he renamed the fork to Fvwm95 Forever
-and moved it to GitHub.
+through fvwm95-2.0.43f-dwf8.  The changes made in those releases are
+documented in the [ChangeLog](ChangeLog) file.  In 2026, he renamed the fork
+to Fvwm95 Forever and moved it to GitHub.
 
 The READMEs that were included in fvwm95-2.0.43f can be found under the docs
 subdirectory.  They describe additional, older layers of forking, cloning,
