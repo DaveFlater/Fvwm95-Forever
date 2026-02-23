@@ -146,8 +146,9 @@ subsequent tip windows might be blanked out.
 ### SDL bugs
 
 SDL2 introduced a regression in how SDL implements fullscreen mode with
-non-EWMH (non-NetWM) window managers.  Apps like Stella and EDuke32 that used
-to work fine with Fvwm95 and SDL1 now get fouled up when going fullscreen.
+non-[EWMH](https://specifications.freedesktop.org/wm/latest/) (non-NetWM)
+window managers.  Apps like Stella and EDuke32 that used to work fine with
+Fvwm95 and SDL1 now get fouled up when going fullscreen.
 
 The following workaround worked for SDL2:
 
