@@ -77,7 +77,8 @@ follows:
     make -j 4
     make install
 
-See the INSTALL file for general help on using configure.
+See the INSTALL file that autoreconf drops for general help on using
+configure.
 
 ## Customization
 
