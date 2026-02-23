@@ -179,7 +179,7 @@ FvwmTaskBar might be misbehaving as a client.
 ## To do
 
 For planned changes and accepted wish list items, see the [Issues
-tab](https://github.com/DaveFlater/Fvwm95 Forever/issues) of the GitHub repo.
+tab](https://github.com/DaveFlater/Fvwm95-Forever/issues) of the GitHub repo.
 
 The code quality is low.  The goal of this fork was to stabilize Fvwm95, not
 rewrite it or duplicate later work on Fvwm.  As a result, the following
