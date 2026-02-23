@@ -85,8 +85,8 @@ configure.
 Customization is accomplished by creating a user file .fvwm95rc or by
 modifying the system-wide system.fvwm95rc.  Consult the man page for fvwm95,
 the installed system.fvwm95rc, and other [documentation provided in the
-distribution](docs/html/index.html) for details.  Beware that described
-syntax can be out-of-date with respect to the source code.
+distribution](docs) for details.  Beware that described syntax can be
+out-of-date with respect to the source code.
 
 The included sample config file permits a reasonable demo of all modules
 except the preprocessors.  See the modules' man pages for further options.
